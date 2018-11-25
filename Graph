@@ -1,0 +1,172 @@
+ public class Grafo {
+        public static int n = 0;
+        public static int[][] matriz;
+	public static LinkedList <Vertice> vertices;  //Lista para almacenar los vértices del grafo
+        public static LinkedList <Arista> aristas; //Almacenamiento de 
+        public static int fila;
+        public static int columna;
+
+        //Constructor del grafo
+        public Grafo(){
+                fila=10;
+                columna=10;
+		this.vertices = new LinkedList<Vertice>();
+                this.aristas = new LinkedList<Arista>();
+                this.n = n;
+                this.matriz = new int [fila][columna];
+        }
+        //Metodo para agregar una vertice al grafo por medio de la latitud longitud y direccion
+        public void agregarVertice(String pDireccion, double pLatitud, double pLongitud){
+            Lugar nuevoLugar = new Lugar(pLatitud,pLongitud, pDireccion);
+            vertices.add(new Vertice(nuevoLugar));  //Agrega el vértice al final de la lista de vértices
+            System.out.print("nodo creado");
+            System.out.print(vertices.size());}
+
+        //Metodo para agragar vertices con un objeto de tipo lugar como parametro que ya tiene los datos
+        public void agregarVertice(Lugar pLugar){
+            vertices.add(new Vertice(pLugar));  //Agrega el vértice al final de la lista de vértices
+            System.out.print("nodo creado");
+            System.out.print(vertices.size());
+
+        }
+        
+
+	public void agregarAristas(Lugar pLugarOrigen, Lugar pLugarDestino, int pPeso){
+            aristas.add(new Arista(pLugarOrigen, pLugarDestino,pPeso ));  //Agrega el vértice al final de la lista de vértices
+            System.out.print("Arista creada");
+            System.out.print(aristas.size());
+        
+        }
+
+	public void agregarArista(Arista pArista){
+            aristas.add(pArista);  //Agrega el vértice al final de la lista de vértices
+            System.out.print("Arista creada");
+            System.out.print(vertices.size());
+        
+        }
+        
+        public int indiceLista(LinkedList<Vertice> pLista,Object pElement ){
+            for(int i=0;i<pLista.size();i++){
+                if(pLista.get(i).getValor().getDireccion().equals(pElement))
+                    return i;
+            }
+            return -1;
+        }
+        
+        
+        public void conectarArista(Arista pArista) {
+            int indOrigen = indiceLista(vertices, pArista.getOrigen().getDireccion());
+            
+            System.out.println("INDICE: "+indOrigen);
+            int indDestino = indiceLista(vertices, pArista.getDestino().getDireccion());
+            System.out.println("INDICE: "+indDestino);
+            matriz[indOrigen][indDestino]=1;
+        }
+        
+       public void conectarAristas(){
+            for(int ind=0;ind<aristas.size();ind++){
+                conectarArista(aristas.get(ind));
+            }
+            
+        }
+               /**Metodo que recorre la totalidad de la lista de vertices y cambia el
+         * valor de visitado a false
+        */
+        public void desvisitarVertices() {
+            for(int ind=0;ind<vertices.size();ind++) {
+                vertices.get(ind).setVisitado(false);
+            }
+        }
+
+   /**Este metodo extrea todas las aristas que posee un vertice del grafo*/
+    public ArrayList<Arista> listadoAristas(int vertIni, ArrayList<Arista> listaAristas) {
+        for(int ari=0;ari<vertices.size();ari++) {
+            if (matriz[vertIni][ari] == 1) {
+                int peso=0;//Falta definir el peso desde la GUI
+                Arista a = new Arista(vertices.get(vertIni).getValor(),vertices.get(ari).getValor(),peso);
+                listaAristas.add(a);
+            }
+        }
+        return listaAristas;
+    }
+    
+    public void imprimirMatrizAdyacencia(){
+        for (int i=0;i<10;i++){
+            for(int j=0;j<10;j++){
+                System.out.print(matriz[i][j]+"-");
+            }
+            System.out.println();
+        }
+    }
+    
+    
+    public boolean vecinosVisitados(LinkedList<Arista> pListaVecinos){
+        for(int i=0; i < pListaVecinos.size();i++){
+
+            Arista vecino = pListaVecinos.get(i);
+            indiceLista(vertices, vecino.getDestino().getDireccion());
+            if(vertices.get(i).isVisitado()==true)
+                continue;
+            else
+                return false;
+        }
+        return true;
+    } 
+
+        public void escribir(String ruta){
+                FileWriter fichero = null;
+                PrintWriter pw = null;
+
+                try
+                {
+                    fichero = new FileWriter(ruta);
+                    pw = new PrintWriter(fichero);
+
+                    for (int i = 0; i < vertices.size(); i++){
+                        pw.println (vertices.get(i).getValor().getDireccion() +","+ vertices.get(i).getValor().getLatitud() + "," + vertices.get(i).getValor().getLongitud());
+                        System.out.println("guarde la linea");
+                        //vertices.get(i).escribirArista("/Users/mac/Desktop/PlacesTEC/fichero_escritura.txt");
+                    } 
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                   try {
+                   // Nuevamente aprovechamos el finally para 
+                   // asegurarnos que se cierra el fichero.
+                   if (null != fichero)
+                      fichero.close();
+                   } catch (Exception e2) {
+                      e2.printStackTrace();
+                   }
+                }
+            }
+
+        public ArrayList<String> leerTxt(String direccion){ //direccion del archivo
+        ArrayList<String> al = new ArrayList<String>();
+
+
+        String texto = "";
+
+        try{
+            BufferedReader bf = new BufferedReader(new FileReader(direccion));
+            String temp = "";
+            String bfRead;
+            while((bfRead = bf.readLine()) != null){ //Hce el ciclo, mientras bfRead tenga datos
+                temp = bfRead; //guardado el texto del archivo
+                al.add(temp);
+            }
+
+            texto = temp;
+
+        }catch(Exception e){ 
+            System.err.println("No se han encontrado archivos");
+        }
+
+
+        return al;
+        }
+
+
+
+    }
