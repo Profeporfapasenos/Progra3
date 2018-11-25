@@ -1,0 +1,55 @@
+public class Nodo<X> {
+   private X element;
+   private Nodo<X> next;
+   private Nodo<X> previuos;
+
+    public Nodo(X element, Nodo<X> next, Nodo<X> previuos) {
+        this.element = element;
+        this.next = next;
+        this.previuos = previuos;
+    }
+
+    public Nodo(X element, Nodo<X> next) {
+        this.element = element;
+        this.next = next;
+    }
+
+    public Nodo(X element) {
+        this.element = element;
+    }
+    
+    
+      public Nodo() {
+    }
+
+    public X getElement() {
+        return element;
+    }
+
+    public void setElement(X element) {
+        this.element = element;
+    }
+
+    public Nodo<X> getNext() {
+        return next;
+    }
+
+    public void setNext(Nodo<X> next) {
+        this.next = next;
+    }
+
+    public Nodo<X> getPreviuos() {
+        return previuos;
+    }
+
+    public void setPreviuos(Nodo<X> previuos) {
+        this.previuos = previuos;
+    }
+
+    @Override
+    public String toString() {
+        return "Nodo{" + "element=" + element + ", next=" + next + ", previuos=" + previuos + '}';
+    }
+
+    
+    }
